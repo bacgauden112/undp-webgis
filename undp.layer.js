@@ -38,11 +38,11 @@ mapLayers.push({name:'Mức độ tổn thương của các công trình thủy 
 mapLayers.push({name:'Mức độ tổn thương của các công trình giao thông',ename:'Roads that were assessed vulnerability',l:'Vulnerability_roads_polyline',htmacdinh:0,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'vulnerability_roads_polyline_en',style:'vulnerability_roads_polyline',isBaseLayer:false,visibility:false});
 mapLayers.push({name:'Khu dân cư',ename:'Residential area',l:'Residential_area_polygon',htmacdinh:0,htdongian:0,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:false});
 mapLayers.push({name:'Ranh giới tỉnh',ename:'Province boundary',l:'Province_boundary_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:true});
-mapLayers.push({name:'Ranh giới huyện',ename:'District boundary',l:'District_boundary_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:false});
-mapLayers.push({name:'Ranh giới xã',ename:'Commune boundary',l:'Commune_boundary_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:false});
-mapLayers.push({name:'Sông suối (dạng đường)',ename:'River (polyline)',l:'River_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:true});
-mapLayers.push({name:'Sông suối (dạng vùng)',ename:'River (polygon)',l:'River_polygon',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:true});
-mapLayers.push({name:'Đường giao thông',ename:'Transportation',l:'Transportation_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'Transportation_polyline_en',style:'',isBaseLayer:false,visibility:true});
+mapLayers.push({name:'Ranh giới huyện',ename:'District boundary',l:'District_boundary_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:true});
+mapLayers.push({name:'Ranh giới xã',ename:'Commune boundary',l:'Commune_boundary_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:true});
+mapLayers.push({name:'Sông suối (dạng đường)',ename:'River (polyline)',l:'River_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:false});
+mapLayers.push({name:'Sông suối (dạng vùng)',ename:'River (polygon)',l:'River_polygon',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:false});
+mapLayers.push({name:'Đường giao thông',ename:'Transportation',l:'Transportation_polyline',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'Transportation_polyline_en',style:'',isBaseLayer:false,visibility:false});
 mapLayers.push({name:'Đường đồng mức độ cao',ename:'Elevation contour',l:'Main_contour_polyline',htmacdinh:0,htdongian:0,htchitiet:0,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:false});
 mapLayers.push({name:'Khu tập trung dân cư',ename:'High residential area density',l:'High_residential_area_density_polygon',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:false});
 mapLayers.push({name:'Khu vực nghiên cứu',ename:'Study_area',l:'Study_area_region',htmacdinh:1,htdongian:1,htchitiet:1,httuychon:1,singleTile:true,estyle:'',style:'',isBaseLayer:false,visibility:true});
@@ -85,6 +85,126 @@ mapLayers.push({name:'Rủi ro lũ quét đối với công trình kè theo kị
 
 
 blockDefault = ['Study_area_region','Province_boundary_polyline','District_boundary_polyline','Commune_boundary_polyline'];
+
+/*mapBlocks['macdinh'] = {
+	vi: 'Mặc định',
+	en: 'Default',
+	layers:[
+	'River_polyline',
+	'River_polygon',
+	'Transportation_polyline',
+	'High_residential_area_density_polygon']
+};
+
+mapBlocks['dongian'] = {
+	vi: 'Đơn giản',
+	en: 'Simple',
+	layers:[
+	'Province_People_committee_Point',
+	'District_People_committee_Point',
+	'Communal_People_Committee_Points',
+	'Vulnerability_embankments_polyline',
+	'Vulnerability_irrigation_points_font_point', 
+	'Vulnerability_roads_polyline',
+	'River_polyline',
+	'River_polygon',
+	'Transportation_polyline',
+	'High_residential_area_density_polygon'
+	]
+};
+
+mapBlocks['chitiet'] = {
+	vi: 'Chi tiết',
+	en: 'Detail',
+	layers:[
+	'Electricity_power_plan_point',
+	'Factory_point',
+	'Post_office_point',
+	'Pumping_station_points',
+	'Dike_Polyline',
+	'Culvert_points',
+	'Hydrological_station_points',
+	'Large_reservoir_polygon',
+	'Meteorological_station_points',
+	'School_point',
+	'Hospital_point',
+	'DDMFSC_Office_points',
+	'Safety_place_points',
+	'Province_People_committee_Point',
+	'District_People_committee_Point',
+	'Communal_People_Committee_Points',
+	'Telecommunation_station_point',
+	'Vulnerability_embankments_polyline',
+	'Vulnerability_irrigation_points_font_point',
+	'Vulnerability_roads_polyline',
+	'Residential_area_polygon',
+	'River_polyline',
+	'River_polygon',
+	'Transportation_polyline',
+	'High_residential_area_density_polygon',
+	'Landslide_risk_polygon'
+	]
+};
+
+mapBlocks['tuychon'] = {
+	vi: 'Tùy chọn',
+	en: 'Optional',
+	layers:[
+	'Pumping_station_points',
+	'Dike_Polyline',
+	'Culvert_points',
+	'Meteorological_station_points',
+	'Large_reservoir_polygon',
+	'Hydrological_station_points',
+	'DDMFSC_Office_points',
+	'Provincial_People_committee_Point',
+	'District_People_committee_Point',
+	'Communal_People_Committee_Points',
+	'Vulnerability_embankments_polyline',
+	'Vulnerability_irrigation_points',
+	'Vulnerability_roads_polyline',
+	'Electricity_power_plan_point',
+	'Factory_point',
+	'Cementary_point',
+	'Pagoda_point',
+	'Post_office_point',
+	'Monument_point',
+	'Electric_transformer_station_point',
+	'School_point',
+	'Hospital_point',
+	'Safety_place_points',
+	'Provincial_People_Committee_Points',
+	'Telecommunation_station_point',
+	'Residential_area_polygon',
+	'Province_boundary_polyline',
+	'District_boundary_polyline',
+	'Commune_boundary_polyline',
+	'River_polyline',
+	'River_polygon',
+	'Transportation_polyline',
+	'Main_contour_polyline',
+	'High_residential_area_density_polygon',
+	'River_sub-basin_polygon',
+	'River_basin_polygon',
+	'Commune_population_polygon',
+	'Forest_polygon',
+	'Landuse_polygon',
+	'anhvetinh',
+	'Landslide_risk_polygon',
+	'Flash_flood_risk_polygon'
+	]
+};*/
+
+mapBlocks['kv_nghien_cuu'] = { vi:'Khu vực nghiên cứu'
+     ,en:'Hydro-Meteorological system'
+     ,layers:['Study_area_region',
+		'Province_boundary_polyline',
+		'District_boundary_polyline',
+		'Commune_boundary_polyline'
+		]
+	,isExpand:true
+    };
+
 mapBlocks['khi_tuong'] = { vi:'Hệ thống trạm khí tượng - thủy văn'
      ,en:'Hydro-Meteorological system'
      ,layers:['Meteorological_station_points',
@@ -92,6 +212,7 @@ mapBlocks['khi_tuong'] = { vi:'Hệ thống trạm khí tượng - thủy văn'
 		'Hydrological_station_points',
 		'Meteorological_station_points',
 		]
+		,isExpand:false
     };
 
 
@@ -109,6 +230,7 @@ mapBlocks['csht_nongthon'] = { vi:'Cơ sở hạ tầng nông nghiệp'
 		'Dike_Polyline',
 		'Culvert_points',
 	 ]
+	 ,isExpand:false
     };
 
 
@@ -136,6 +258,7 @@ mapBlocks['csht_dandung'] = { vi:'Các cơ sở hạ tầng dân dụng'
 		'Factory_point',
 		'Telecommunation_station_point',
 	 ]
+	 ,isExpand:false
     };
 mapBlocks['csht_tonthuong'] = { vi:'Các cơ sở hạ tầng nông thôn đã được đanh giá tổn thương'
      ,en:'Rural infrastructure that were done vulnerability assessment'
@@ -147,6 +270,7 @@ mapBlocks['csht_tonthuong'] = { vi:'Các cơ sở hạ tầng nông thôn đã �
 		'Vulnerability_irrigation_points',
 		'Vulnerability_roads_polyline',
 	 ]
+	 ,isExpand:false
     };
 mapBlocks['diagioihanhchinh'] = { vi:'Địa giới hành chính'
      ,en:'Administrative boundary'
@@ -160,6 +284,7 @@ mapBlocks['diagioihanhchinh'] = { vi:'Địa giới hành chính'
 		'Study_area_region',
 
 	 ]
+	 ,isExpand:false
     };
 mapBlocks['songsuoi'] = { vi:'Hệ thống sông suối'
      ,en:'River system'
@@ -168,6 +293,7 @@ mapBlocks['songsuoi'] = { vi:'Hệ thống sông suối'
 		'River_polygon',
 
 	 ]
+	 ,isExpand:false
     };
 
 
@@ -224,6 +350,7 @@ mapBlocks['transportation'] = { vi:'Hệ thống đường giao thông và nhà 
 		'Flash_flood_risk_polygon',
 		'Flash_flood_risk_polygon',
 	 ]
+	 ,isExpand:false
     };
 
 

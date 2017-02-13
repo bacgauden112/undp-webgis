@@ -63,7 +63,6 @@ function _map_layer_obj(data){
 		},
 		{
 			visibility: data.visibility,
-			//visibility: false,
 			isBaseLayer: data.isBaseLayer,
 			singleTile: data.singleTile,
 			data:data
@@ -151,7 +150,8 @@ var province_combobox = Ext.create('Ext.form.field.ComboBox', {
     listeners: {
         select: function () {
             var value = this.getValue();
-            var extent = new OpenLayers.Bounds(value);
+            //var extent = new OpenLayers.Bounds(value);
+			var extent = new OpenLayers.Bounds(value[0],value[3],value[1],value[2]);
             mapPanel.map.zoomToExtent(extent);
         }
     }
@@ -238,6 +238,7 @@ function _map_super_panel_by_attr(datas,f){
 	});
 }
 function _layer_show(display,layer){
+	
 	var block = mapBlocks[display];
 	if (!block) return false;
 	//console.log (display);
@@ -247,13 +248,14 @@ function _layer_show(display,layer){
 		//console.log ("block=[" + display + "]->[" + layer.l + "]=1");
 		return true;
 	}
-	/*check = blockDefault.indexOf(layer.l);
+	check = blockDefault.indexOf(layer.l);
 	if (check > -1) {
 		return true;
-	}*/
+	}
+	
 	return false;
 }
-/*function _layer_options(){
+function _layer_options(){
 	var ret = [
 					{ value: 'htmacdinh', name: __t('Mặc định') },
 					{ value: 'htdongian', name: __t('Đơn giản') },
@@ -271,119 +273,53 @@ function _layer_show(display,layer){
 	}
 	
 	return ret;
-}*/
+}
 var mapViewOptions ;
 var layerTitle = __t("Lớp thông tin");
 var mapOptionLabel =  __t('Hiển thị');
 
 
-function show_layer(block,layer){
-	//return layer.visibility;
-	//console.log (layer.l);
-	var check = block.layers.indexOf(layer.l);
-	check = blockDefault.indexOf(layer.l);
-	if (check > -1) {
-		return true;
-	}	
-	return false;
-}
 
-function create_group(code, block){
-	var t = _map_lang == 'en' ? block.en : block.vi;
-	return {
-			plugins: [{
-				ptype: 'gx_layercontainer',
-				loader: {
-					store: mapPanel.layers,
-					filter:function(record) {
-						var layer = record.getLayer();
-						//_layer_show
-						//if(block.layers.indexOf(layer.data.l) > -1){
-						if (_layer_show(code,layer.data)){
-							return true;
-						} else {
-							return false;
-						}
-					},
-					createNode: function(attr) {
-						attr.component = {
-							xtype: "gx_wmslegend",
-							layerRecord: mapPanel.layers.getByLayer(attr.layer),
-							showTitle: false,
-							cls: "legend"
-						};
-						return GeoExt.tree.LayerLoader.prototype.createNode.call(this, attr);
-					}
-				}
-			}],
-			expanded: block.isExpand,
-			text: __t(t)
-		}
-}
-function create_groups(){
-	var ret = [];
-	var block;
-	for (var prop in mapBlocks) {
-		if (mapBlocks.hasOwnProperty(prop) && mapBlocks[prop]) {
-			block = mapBlocks[prop];
-			ret.push(create_group(prop,block));
-		}
-	}
-	return ret;
-}
-
-function get_group_by_name(n){
-	var ret = 0;
-	var block;
-	for (var prop in mapBlocks) {
-		if (mapBlocks.hasOwnProperty(prop) && mapBlocks[prop]) {
-			block = mapBlocks[prop];
-			if ((block.vi == n) || (block.en == n)) ret = block
-		}
-	}
-	return ret;
-}
 function _create_store(){
 	return Ext.create('Ext.data.TreeStore', {
 		model: 'GeoExt.data.LayerTreeModel',
 		root: {
 			expanded: true,
-			children: create_groups()
+			children: [
+				{
+					plugins: [{
+						ptype: 'gx_layercontainer',
+						loader: {
+							store: mapPanel.layers,
+							createNode: function(attr) {
+								attr.component = {
+									xtype: "gx_wmslegend",
+									layerRecord: mapPanel.layers.getByLayer(attr.layer),
+									showTitle: false,
+									cls: "legend"
+								};
+								return GeoExt.tree.LayerLoader.prototype.createNode.call(this, attr);
+							}
+						}
+					}],
+					expanded: false,
+					text: layerTitle
+				}
+			]
 		}
 	});
 }
-function hide_layers(layer){
-	var block = get_group_by_name(layer.data.text);
-	if (!block) return 0;
-	mapPanel.map.layers.forEach(function(element){
-		//if(block.layers.indexOf(element.data.l) > -1 || blockDefault.indexOf(element.data.l) > -1){
-		if(block.layers.indexOf(element.data.l) > -1){
-			element.setVisibility(false);
-		}
-	});
-}
-function show_layers(layer){
-	var block = get_group_by_name(layer.data.text);
-	if (!block) return 0;
-	mapPanel.map.layers.forEach(function(element){
-		if(block.layers.indexOf(element.data.l) > -1){
-		//if(show_layer(block,element.data)){
-			element.setVisibility(true);
-		}
-	});
-}
+
 var filterAttr = 'htmacdinh';
 var mapPanel;
 var store;
 var projectHtml = _project_html();
 var en_url = '/webgis/?lang=en';
 var vi_url = '/webgis/';
-var curr_group = 0;
 var app = Ext.application({
     name: __t('Tree Legend'),
     launch: function() {
-		//mapPanel = _map_super_panel_by_attr(mapLayers,filterAttr);
-		mapPanel = _map_super_panel_by_attr(mapLayers,0);
+		mapPanel = _map_super_panel_by_attr(mapLayers,filterAttr);
 		store = _create_store();
         var langtoolbar = {
             xtype: 'toolbar',
@@ -427,29 +363,50 @@ var app = Ext.application({
             store: store,
             rootVisible: false,
             lines: false,
-            dockedItems: [langtoolbar],
-			listeners: {
-				// Xu ly su kien click vao nhom layer
-				itemclick: function(s,r) {
-					if(r.isExpanded()){
-						r.collapse();
-					} else {
-						r.expand();
-					}						
-				},
-				itemexpand: function(s,r) {
-					/*if(curr_group){
-						//console.log(s);
-						hide_layers(curr_group);
-						curr_group.collapse();
-					}*/
-					show_layers(s);
-					//curr_group = s;
-				},
-				itemcollapse: function(s,r) {
-					hide_layers(s);
+			tbar: [{
+				xtype: 'combo',
+				width: 220,
+				labelWidth: 60,
+				fieldLabel: mapOptionLabel,
+				displayField: 'name',
+				valueField: 'value',
+				//labelStyle: 'cursor:move;',
+				//margin: '0 5 0 0',
+				store: Ext.create('Ext.data.Store', {
+					fields: ['value', 'name'],
+					data : _layer_options()
+				}),
+				value: 'htmacdinh',
+				listeners: {
+					select: function(combo) {
+						var v = combo.getValue();
+						filterAttr = v;//'httuychon';
+						var layer,obj;
+						
+						var len = mapPanel.map.layers.length;
+						for(var i = len-1; i>=0;i--){
+							mapPanel.map.removeLayer(mapPanel.map.layers[i]);
+						}
+						var show = 0;
+						for(var i = mapLayers.length-1; i>=0;i--){
+							obj = mapLayers[i];
+							show = 0;
+							if (obj[filterAttr] === 1){
+								show = 1;
+							}else if (_layer_show(filterAttr,obj)){
+								show = 1;
+							}
+							if (show){
+								layer = _map_layer_obj(obj);
+								mapPanel.map.addLayer(layer);
+							}
+						}
+						store = _create_store();
+						//tree.store = store;
+					}
 				}
-			}
+			}],
+            dockedItems: [langtoolbar]
         });
 
 		// test start
